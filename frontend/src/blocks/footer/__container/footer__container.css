@@ -1,0 +1,11 @@
+.footer__container {
+  color: #545454;
+  width: 68.75%;
+  margin: 0 auto;
+}
+
+@media (max-width: 500px) {
+  .footer__container {
+    width: 88.125%;
+  }
+}

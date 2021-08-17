@@ -1,0 +1,5 @@
+.card__image-container {
+  height: 100%;
+  max-height: calc(100% - 80px);
+  overflow: hidden;
+}

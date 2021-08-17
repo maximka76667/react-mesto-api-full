@@ -1,0 +1,27 @@
+.profile__avatar {
+  position: relative;
+  clip-path: circle();
+}
+
+.profile__avatar:after {
+  display: none;
+  background-image: url(../../../images/edit-icon.svg);
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: 26px;
+}
+
+.profile__avatar:hover:after {
+  position: absolute;
+  display: block;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  content: '';
+  background-color: #000;
+  opacity: 0.8;
+  cursor: pointer;
+}

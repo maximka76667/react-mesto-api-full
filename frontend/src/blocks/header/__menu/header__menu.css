@@ -1,0 +1,8 @@
+.header__menu {
+  width: 100%;
+  padding: 40px 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}

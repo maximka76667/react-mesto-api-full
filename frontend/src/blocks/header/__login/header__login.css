@@ -1,0 +1,10 @@
+.header__login {
+  margin: 0 24px 0 auto;
+  color: #fff;
+  font-size: 18px;
+  line-height: 34px;
+}
+
+.header__menu > .header__login {
+  margin: 0;
+}

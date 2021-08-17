@@ -1,0 +1,18 @@
+.popup__title_type_image {
+  font-size: 12px;
+  line-height: 15px;
+  color: #fff;
+  margin: 10px 0 0;
+  font-weight: normal;
+  max-width: 290px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-align: left;
+}
+
+@media (max-width: 500px) {
+  .popup__title_type_image {
+    max-width: 240px;
+  }
+}

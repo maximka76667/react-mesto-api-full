@@ -1,0 +1,11 @@
+.auth {
+  width: 68.75%;
+  display: flex;
+  margin: 0 auto;
+}
+
+@media (max-width: 715px) {
+  .auth {
+    width: 81.25%;
+  }
+}
