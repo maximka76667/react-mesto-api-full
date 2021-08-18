@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
+const cors = require('cors');
 
 // Validator
 const { celebrate, Joi } = require('celebrate');
@@ -29,6 +30,17 @@ const limiter = rateLimit({
   message: 'Too many requests, please try again later.',
 });
 
+const allowedCors = [
+  'https://max76667.mesto.nomoredomains.monster',
+  'http://max76667.mesto.nomoredomains.monster',
+  'localhost:3000',
+  'http://localhost:3000',
+  'localhost:3001',
+  'http://localhost:3001',
+];
+
+const DEFAULT_ALLOWED_METHODS = 'GET, HEAD, PUT, PATCH, POST, DELETE';
+
 const app = express();
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
@@ -47,6 +59,33 @@ app.use(helmet());
 app.use(limiter);
 
 app.use(requestLogger);
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // allow requests with no origin
+    // (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedCors.includes(origin)) return callback(null, true);
+    return callback(new Error('Ошибка CORS'), true);
+  },
+  methods: DEFAULT_ALLOWED_METHODS,
+  allowedHeaders: 'Content-Type, Authorization',
+  credentials: true,
+}));
+
+app.use((req, res, next) => {
+  const { method } = req;
+  const requestHeaders = req.headers['access-control-request-headers'];
+
+  if (method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
+    res.header('Access-Control-Allow-Headers', requestHeaders);
+
+    return res.end();
+  }
+
+  return next();
+});
 
 // User signup
 app.post('/signup', celebrate({
@@ -88,6 +127,7 @@ app.use((err, req, res, next) => {
   next(err);
 });
 
+// Main Error Handler
 app.use((err, req, res, next) => {
   const { statusCode = DEFAULT_ERROR_CODE, message = errorMessages.defaultErrorMessage } = err;
 
