@@ -50,7 +50,7 @@ class Auth {
 }
 
 const auth = new Auth({
-  baseUrl: 'http://api.max76667.mesto.nomoredomains.monster'
+  baseUrl: 'https://api.max76667.mesto.nomoredomains.monster'
 })
 
 export default auth;
