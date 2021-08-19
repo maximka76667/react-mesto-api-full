@@ -98,7 +98,7 @@ class Api {
 }
 
 const api = new Api({
-  baseUrl: 'http://localhost:3000'
+  baseUrl: 'http://api.max76667.mesto.nomoredomains.monster'
 });
 
 export default api;
