@@ -75,26 +75,11 @@ app.use(cors({
   credentials: true,
 }));
 
-// app.use(cors());
-
-// app.use((req, res, next) => {
-//   const { origin } = req.headers;
-//   const { method } = req;
-//   const requestHeaders = req.headers['access-control-request-headers'];
-
-//   if (allowedCors.includes(origin)) {
-//     res.header('Access-Control-Allow-Origin', origin);
-//   }
-
-//   if (method === 'OPTIONS') {
-//     res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
-//     res.header('Access-Control-Allow-Headers', requestHeaders);
-//     res.header('Access-Control-Allow-Credentials', true);
-//     return res.end();
-//   }
-
-//   return next();
-// });
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
 
 // User signup
 app.post('/signup', celebrate({
@@ -114,12 +99,6 @@ app.post('/signin', celebrate({
     password: Joi.string().required(),
   }),
 }), login);
-
-app.get('/crash-test', () => {
-  setTimeout(() => {
-    throw new Error('Сервер сейчас упадёт');
-  }, 0);
-});
 
 app.use(auth);
 
