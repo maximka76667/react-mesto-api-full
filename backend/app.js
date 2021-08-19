@@ -82,16 +82,15 @@ app.get('/crash-test', () => {
 });
 
 // User signup
-app.post('/signup',
-  celebrate({
-    body: Joi.object().keys({
-      name: Joi.string().min(2).max(30),
-      about: Joi.string().min(2).max(30),
-      avatar: Joi.string().min(2).custom(validateLink),
-      email: Joi.string().email().required(),
-      password: Joi.string().required(),
-    }),
-  }), createUser);
+app.post('/signup', celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().min(2).max(30),
+    about: Joi.string().min(2).max(30),
+    avatar: Joi.string().min(2).custom(validateLink),
+    email: Joi.string().email().required(),
+    password: Joi.string().required(),
+  }),
+}), createUser);
 
 // User signin
 app.post('/signin', celebrate({
