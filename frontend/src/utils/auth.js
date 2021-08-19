@@ -49,7 +49,7 @@ class Auth {
 }
 
 const auth = new Auth({
-  baseUrl: 'https://api.max76667.mesto.nomoredomains.monster'
+  baseUrl: 'https://localhost:3000'
 })
 
 export default auth;

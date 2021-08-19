@@ -30,16 +30,16 @@ const limiter = rateLimit({
   message: 'Too many requests, please try again later.',
 });
 
-const allowedCors = [
-  'https://max76667.mesto.nomoredomains.monster',
-  'http://max76667.mesto.nomoredomains.monster',
-  'localhost:3000',
-  'http://localhost:3000',
-  'localhost:3001',
-  'http://localhost:3001',
-];
+// const allowedCors = [
+//   'https://max76667.mesto.nomoredomains.monster',
+//   'http://max76667.mesto.nomoredomains.monster',
+//   'localhost:3000',
+//   'http://localhost:3000',
+//   'localhost:3001',
+//   'http://localhost:3001',
+// ];
 
-const DEFAULT_ALLOWED_METHODS = 'GET, HEAD, PUT, PATCH, POST, DELETE';
+// const DEFAULT_ALLOWED_METHODS = 'GET, HEAD, PUT, PATCH, POST, DELETE';
 
 const app = express();
 
