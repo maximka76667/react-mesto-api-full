@@ -30,16 +30,18 @@ const limiter = rateLimit({
   message: 'Too many requests, please try again later.',
 });
 
-// const allowedCors = [
-//   'https://max76667.mesto.nomoredomains.monster',
-//   'http://max76667.mesto.nomoredomains.monster',
-//   'localhost:3000',
-//   'http://localhost:3000',
-//   'localhost:3001',
-//   'http://localhost:3001',
-// ];
+const allowedCors = [
+  'https://max76667.mesto.nomoredomains.monster',
+  'http://max76667.mesto.nomoredomains.monster',
+  'localhost:3000',
+  'http://localhost:3000',
+  'localhost:3001',
+  'http://localhost:3001',
+  'localhost:5000',
+  'http://localhost:5000',
+];
 
-// const DEFAULT_ALLOWED_METHODS = 'GET, HEAD, PUT, PATCH, POST, DELETE';
+const DEFAULT_ALLOWED_METHODS = 'GET, HEAD, PUT, PATCH, POST, DELETE';
 
 const app = express();
 
@@ -60,19 +62,18 @@ app.use(limiter);
 
 app.use(requestLogger);
 
-// app.use(cors({
-//   origin: (origin, callback) => {
-//     // allow requests with no origin
-//     // (like mobile apps or curl requests)
-//     if (!origin) return callback(null, true);
-//     if (allowedCors.includes(origin)) return callback(null, true);
-//     return callback(new Error('Ошибка CORS'), true);
-//   },
-//   methods: DEFAULT_ALLOWED_METHODS,
-//   allowedHeaders: 'Content-Type, Authorization',
-//   credentials: true,
-//   preflightContinue: true,
-// }));
+app.use(cors({
+  origin: (origin, callback) => {
+    // allow requests with no origin
+    // (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedCors.includes(origin)) return callback(null, true);
+    return callback(new Error('Ошибка CORS'), true);
+  },
+  methods: DEFAULT_ALLOWED_METHODS,
+  allowedHeaders: 'Content-Type, Authorization',
+  credentials: true,
+}));
 
 // app.use(cors());
 
