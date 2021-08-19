@@ -38,7 +38,7 @@ function Header(props) {
   return (
     <header className="header">
       <div className={`header__menu ${isMenuOpen ? 'header__menu_opened' : ''}`}>
-        <p className="header__login">{currentUser?.email}</p>
+        <p className="header__login">{currentUser.email}</p>
         <Link to="/signin" className="header__link header__link_logged-in" onClick={handleLogoutClick}>Выйти</Link>
       </div>
       <div className="header__container">
@@ -54,7 +54,7 @@ function Header(props) {
             case '/':
               return (
                 <>
-                  <p className={`header__login ${isMenuAllowed ? 'header__login_hidden' : ''}`}>{currentUser?.email}</p>
+                  <p className={`header__login ${isMenuAllowed ? 'header__login_hidden' : ''}`}>{currentUser.email}</p>
                   <Link to="/signin" className={`header__link header__link_logged-in ${isMenuAllowed ? 'header__link_hidden' : ''}`} onClick={handleLogoutClick}>Выйти</Link>
                   <button className="header__menu-button" onClick={toggleMenu}>
                     <img src={isMenuOpen ? close : menu} alt="Меню" />
