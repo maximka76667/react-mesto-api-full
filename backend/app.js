@@ -60,33 +60,40 @@ app.use(limiter);
 
 app.use(requestLogger);
 
-app.use(cors({
-  origin: (origin, callback) => {
-    // allow requests with no origin
-    // (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    if (allowedCors.includes(origin)) return callback(null, true);
-    return callback(new Error('Ошибка CORS'), true);
-  },
-  methods: DEFAULT_ALLOWED_METHODS,
-  allowedHeaders: 'Content-Type, Authorization',
-  credentials: true,
-  preflightContinue: true,
-}));
+// app.use(cors({
+//   origin: (origin, callback) => {
+//     // allow requests with no origin
+//     // (like mobile apps or curl requests)
+//     if (!origin) return callback(null, true);
+//     if (allowedCors.includes(origin)) return callback(null, true);
+//     return callback(new Error('Ошибка CORS'), true);
+//   },
+//   methods: DEFAULT_ALLOWED_METHODS,
+//   allowedHeaders: 'Content-Type, Authorization',
+//   credentials: true,
+//   preflightContinue: true,
+// }));
 
-app.use((req, res, next) => {
-  const { method } = req;
-  const requestHeaders = req.headers['access-control-request-headers'];
+// app.use(cors());
 
-  if (method === 'OPTIONS') {
-    res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
-    res.header('Access-Control-Allow-Headers', requestHeaders);
-    res.header('Access-Control-Allow-Credentials', true);
-    return res.end();
-  }
+// app.use((req, res, next) => {
+//   const { origin } = req.headers;
+//   const { method } = req;
+//   const requestHeaders = req.headers['access-control-request-headers'];
 
-  return next();
-});
+//   if (allowedCors.includes(origin)) {
+//     res.header('Access-Control-Allow-Origin', origin);
+//   }
+
+//   if (method === 'OPTIONS') {
+//     res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
+//     res.header('Access-Control-Allow-Headers', requestHeaders);
+//     res.header('Access-Control-Allow-Credentials', true);
+//     return res.end();
+//   }
+
+//   return next();
+// });
 
 // User signup
 app.post('/signup', celebrate({
