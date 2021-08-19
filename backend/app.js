@@ -8,7 +8,9 @@ const helmet = require('helmet');
 const cors = require('cors');
 
 // Validator
-const { celebrate, Joi } = require('celebrate');
+const {
+  celebrate, Joi, isCelebrateError,
+} = require('celebrate');
 const { validateLink } = require('./utils/validateLink');
 
 // Middlewares
@@ -20,9 +22,7 @@ const { login, createUser } = require('./controllers/users');
 
 // Errors
 const NotFoundError = require('./errors/not-found-error');
-const ConflictError = require('./errors/conflict-error');
-const BadRequestError = require('./errors/bad-request-error');
-const { errorMessages, DEFAULT_ERROR_CODE } = require('./errors/error-config');
+const { errorMessages, DEFAULT_ERROR_CODE, BAD_REQUEST_ERROR_CODE } = require('./errors/error-config');
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -82,15 +82,16 @@ app.get('/crash-test', () => {
 });
 
 // User signup
-app.post('/signup', celebrate({
-  body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
-    about: Joi.string().min(2).max(30),
-    avatar: Joi.string().min(2).custom(validateLink),
-    email: Joi.string().email().required(),
-    password: Joi.string().required(),
-  }),
-}), createUser);
+app.post('/signup',
+  celebrate({
+    body: Joi.object().keys({
+      name: Joi.string().min(2).max(30),
+      about: Joi.string().min(2).max(30),
+      avatar: Joi.string().min(2).custom(validateLink),
+      email: Joi.string().email().required(),
+      password: Joi.string().required(),
+    }),
+  }), createUser);
 
 // User signin
 app.post('/signin', celebrate({
@@ -113,23 +114,21 @@ app.use((req, res, next) => {
   next(new NotFoundError(errorMessages.notFoundErrorMessages.routes));
 });
 
-app.use((err, req, res, next) => {
-  if (err.name === 'MongoError' && err.code === 11000) throw new ConflictError(errorMessages.conflictErrorMessage);
-  if (err.name === 'ValidationError') throw new BadRequestError(errorMessages.validationErrorMessage);
-  if (err.message === 'Validation failed') throw new BadRequestError(errorMessages.validationErrorMessage);
-  if (err.name === 'CastError') throw new BadRequestError(errorMessages.castErrorMessage);
-  next(err);
-});
-
 // Main Error Handler
 app.use((err, req, res, next) => {
   const { statusCode = DEFAULT_ERROR_CODE, message = errorMessages.defaultErrorMessage } = err;
+
+  if (isCelebrateError(err)) {
+    return res
+      .status(BAD_REQUEST_ERROR_CODE)
+      .send({ message: errorMessages.validationErrorMessage });
+  }
 
   res
     .status(statusCode)
     .send({ message });
 
-  next();
+  return next();
 });
 
 app.listen(3000);

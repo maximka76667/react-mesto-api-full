@@ -6,6 +6,7 @@ const { JWT_SECRET, NODE_ENV } = process.env;
 const NotFoundError = require('../errors/not-found-error');
 const ForbiddenError = require('../errors/forbidden-error');
 const { errorMessages } = require('../errors/error-config');
+const handleErrors = require('../errors/handleErrors');
 
 const { forbiddenErrorMessage } = errorMessages;
 const notFoundErrorMessage = errorMessages.notFoundErrorMessages.users;
@@ -13,13 +14,13 @@ const notFoundErrorMessage = errorMessages.notFoundErrorMessages.users;
 const getUsers = (req, res, next) => {
   User.find({})
     .then((users) => res.send({ users }))
-    .catch(next);
+    .catch((err) => next(handleErrors(err)));
 };
 
 const getMyUser = (req, res, next) => {
   User.find({ _id: req.user._id })
     .then((user) => res.send({ user: user[0] }))
-    .catch(next);
+    .catch((err) => next(handleErrors(err)));
 };
 
 const getUserById = (req, res, next) => {
@@ -29,7 +30,7 @@ const getUserById = (req, res, next) => {
       if (!user) throw new NotFoundError(notFoundErrorMessage);
       return res.send({ user });
     })
-    .catch(next);
+    .catch((err) => next(handleErrors(err)));
 };
 
 const createUser = (req, res, next) => {
@@ -51,7 +52,7 @@ const createUser = (req, res, next) => {
               avatar,
               email,
             }))
-            .catch(next),
+            .catch((err) => next(handleErrors(err))),
         )
         .catch(next);
     })
@@ -67,7 +68,7 @@ const updateUser = (req, res, next) => {
       if (user._id.toString() !== req.user._id) throw new ForbiddenError(forbiddenErrorMessage);
       return res.send({ user });
     })
-    .catch(next);
+    .catch((err) => next(handleErrors(err)));
 };
 
 const updateAvatar = (req, res, next) => {
@@ -79,7 +80,7 @@ const updateAvatar = (req, res, next) => {
       if (user._id.toString() !== req.user._id) throw new ForbiddenError(forbiddenErrorMessage);
       return res.send({ user });
     })
-    .catch(next);
+    .catch((err) => next(handleErrors(err)));
 };
 
 const login = (req, res, next) => {
@@ -102,7 +103,7 @@ const login = (req, res, next) => {
         .send({ message: 'Авторизация прошла успешно', token })
         .end();
     })
-    .catch(next);
+    .catch((err) => next(handleErrors(err)));
 };
 
 module.exports = {
