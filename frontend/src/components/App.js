@@ -136,12 +136,10 @@ function App(props) {
 
   function handleLogin({login, password}) {
     auth.login({login, password})
-    .then((data) => {
-      if(data.token) {
-        handleAuth(data.token);
-      }
-    })
-    .catch(err => handleError(err));
+      .then((data) => {
+        if(data.token) handleAuth(data.token);
+      })
+      .catch(err => handleError(err));
   }
 
   function handleAuth(token) {
@@ -199,6 +197,8 @@ function App(props) {
 
   React.useEffect(() => {
     handleTokenCheck();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

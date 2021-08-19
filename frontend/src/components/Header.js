@@ -14,20 +14,15 @@ function Header(props) {
   const currentUser = React.useContext(CurrentUserContext);
 
   function toggleMenu() {
-    if(isMenuOpen) {
-      setIsMenuOpen(false);
-    } else {
-      setIsMenuOpen(true);
-    }
+    if(isMenuOpen) return setIsMenuOpen(false);
+    return setIsMenuOpen(true);
   }
 
   function checkResize() {
-    if(window.innerWidth < 500) {
-      setIsMenuAllowed(true);
-    } else {
-      setIsMenuAllowed(false);
-      setIsMenuOpen(false);
-    }
+    if(window.innerWidth < 500) return setIsMenuAllowed(true);
+    setIsMenuAllowed(false);
+    setIsMenuOpen(false);
+    return
   }
 
   function handleLogoutClick() {

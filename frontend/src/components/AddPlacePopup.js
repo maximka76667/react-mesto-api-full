@@ -59,24 +59,20 @@ export default function AddPlacePopup({ isOpen, isLoading, onClose, onAddPlace }
         if(!inputElement.validity.valid) {
           setIsNameError(true);
           setNameError(inputElement.validationMessage);
-          
-        } else {
-          setIsNameError(false);
-          setNameError('');
-          
+          return;
         }
+        setIsNameError(false);
+        setNameError('');
         break;
       }
       case 'placeLink' : {
         if(!inputElement.validity.valid) {
           setIsLinkError(true);
           setLinkError(inputElement.validationMessage);
-          
-        } else {
-          setIsLinkError(false);
-          setLinkError('');
-          
+          return;
         }
+        setIsLinkError(false);
+        setLinkError('');
         break;
       }
       default: {}
@@ -86,9 +82,6 @@ export default function AddPlacePopup({ isOpen, isLoading, onClose, onAddPlace }
   React.useEffect(() => {
     setName('');
     setLink('');
-  }, [isOpen])
-
-  React.useEffect(() => {
     setIsNameError(false);
     setIsLinkError(false);
     setIsSubmitValid(false);

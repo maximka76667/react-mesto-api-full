@@ -39,11 +39,12 @@ export default function EditAvatarPopup({ isOpen, isLoading, onClose, onUpdateAv
       setIsError(true);
       setError(inputElement.validationMessage);
       setIsSubmitValid(false);
-    } else {
-      setIsError(false);
-      setError('');
-      setIsSubmitValid(true);
+      return;
     }
+    setIsError(false);
+    setError('');
+    setIsSubmitValid(true);
+    return;
   }
 
   React.useEffect(() => {

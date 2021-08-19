@@ -35,13 +35,11 @@ export default function EditProfilePopup({ isOpen, isLoading, onClose, onUpdateU
 
   function handleChangeName(e) {
     setName(e.target.value);
-
     handleValidation(e);
   }
 
   function handleChangeDescription(e) {
     setDescription(e.target.value);
-
     handleValidation(e);
   }
 
@@ -63,11 +61,11 @@ export default function EditProfilePopup({ isOpen, isLoading, onClose, onUpdateU
           setIsNameError(true);
           setNameError(inputElement.validationMessage);
           setIsSubmitValid(false);
-        } else {
-          setIsNameError(false);
-          setNameError('');
-          setIsSubmitValid(true);
+          return;
         }
+        setIsNameError(false);
+        setNameError('');
+        setIsSubmitValid(true);
         break;
       }
       case 'profilePosition' : {
@@ -75,11 +73,11 @@ export default function EditProfilePopup({ isOpen, isLoading, onClose, onUpdateU
           setIsDescriptionError(true);
           setDescriptionError(inputElement.validationMessage);
           setIsSubmitValid(false);
-        } else {
-          setIsDescriptionError(false);
-          setDescriptionError('');
-          setIsSubmitValid(true);
+          return;
         }
+        setIsDescriptionError(false);
+        setDescriptionError('');
+        setIsSubmitValid(true);
         break;
       }
       default: {}

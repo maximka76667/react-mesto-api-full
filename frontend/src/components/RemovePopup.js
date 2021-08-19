@@ -4,7 +4,6 @@ export default function RemovePopup({ isOpen, isLoading, onClose, onCardDelete, 
 
   function handleCardDelete(e) {
     e.preventDefault();
-
     onCardDelete(card);
   }
 
