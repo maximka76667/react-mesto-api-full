@@ -80,7 +80,6 @@ app.use((req, res, next) => {
   if (method === 'OPTIONS') {
     res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
     res.header('Access-Control-Allow-Headers', requestHeaders);
-
     return res.end();
   }
 
@@ -105,6 +104,12 @@ app.post('/signin', celebrate({
     password: Joi.string().required(),
   }),
 }), login);
+
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
 
 app.use(auth);
 

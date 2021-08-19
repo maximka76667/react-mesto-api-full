@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
-const { JWT_SECRET = 'jwt-secret' } = process.env;
+const { JWT_SECRET, NODE_ENV } = process.env;
 const NotFoundError = require('../errors/not-found-error');
 const ForbiddenError = require('../errors/forbidden-error');
 const { errorMessages } = require('../errors/error-config');
@@ -12,17 +12,13 @@ const notFoundErrorMessage = errorMessages.notFoundErrorMessages.users;
 
 const getUsers = (req, res, next) => {
   User.find({})
-    .then((users) => {
-      res.send({ users });
-    })
+    .then((users) => res.send({ users }))
     .catch(next);
 };
 
 const getMyUser = (req, res, next) => {
   User.find({ _id: req.user._id })
-    .then((user) => {
-      res.send({ user });
-    })
+    .then((user) => res.send({ user: user[0] }))
     .catch(next);
 };
 
@@ -30,9 +26,7 @@ const getUserById = (req, res, next) => {
   const { userId } = req.params;
   User.findById(userId)
     .then((user) => {
-      if (!user) {
-        throw new NotFoundError(notFoundErrorMessage);
-      }
+      if (!user) throw new NotFoundError(notFoundErrorMessage);
       return res.send({ user });
     })
     .catch(next);
@@ -69,12 +63,8 @@ const updateUser = (req, res, next) => {
 
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
     .then((user) => {
-      if (!user) {
-        throw new NotFoundError(notFoundErrorMessage);
-      }
-      if (user._id.toString() !== req.user._id) {
-        throw new ForbiddenError(forbiddenErrorMessage);
-      }
+      if (!user) throw new NotFoundError(notFoundErrorMessage);
+      if (user._id.toString() !== req.user._id) throw new ForbiddenError(forbiddenErrorMessage);
       return res.send({ user });
     })
     .catch(next);
@@ -85,12 +75,8 @@ const updateAvatar = (req, res, next) => {
 
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
     .then((user) => {
-      if (!user) {
-        throw new NotFoundError(notFoundErrorMessage);
-      }
-      if (user._id.toString() !== req.user._id) {
-        throw new ForbiddenError(forbiddenErrorMessage);
-      }
+      if (!user) throw new NotFoundError(notFoundErrorMessage);
+      if (user._id.toString() !== req.user._id) throw new ForbiddenError(forbiddenErrorMessage);
       return res.send({ user });
     })
     .catch(next);
@@ -103,7 +89,7 @@ const login = (req, res, next) => {
     .then((user) => {
       const token = jwt.sign(
         { _id: user._id },
-        JWT_SECRET,
+        NODE_ENV === 'production' ? JWT_SECRET : 'jwt-secret',
         { expiresIn: '7d' },
       );
 
@@ -113,7 +99,7 @@ const login = (req, res, next) => {
           httpOnly: true,
           sameSite: true,
         })
-        .send({ message: 'Авторизация прошла успешно' })
+        .send({ message: 'Авторизация прошла успешно', token })
         .end();
     })
     .catch(next);

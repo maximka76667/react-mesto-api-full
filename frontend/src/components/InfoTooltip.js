@@ -16,7 +16,7 @@ function InfoTooltip(props) {
               case '/':
                 return 'Вы успешно вошли!'
               
-              case '/sign-in':
+              case '/signin':
                 return 'Вы успешно зарегистрировались!'
 
               default:

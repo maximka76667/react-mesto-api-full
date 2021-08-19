@@ -71,7 +71,7 @@ class Api {
   }
 
   changeLikeCardStatus(cardId, isLiked) {
-    return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
+    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: isLiked ? 'DELETE' : 'PUT',
       headers: {
         authorization: this._token,
@@ -93,11 +93,14 @@ class Api {
     })
     .then(this._checkResponse);
   }
+
+  changeToken(token) {
+    this._token = `Bearer ${token}`
+  }
 }
 
 const api = new Api({
-  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-22',
-  authorization: '6e0d021d-4f3f-452d-8c82-5a27e9592d29'
+  baseUrl: 'http://localhost:3000'
 });
 
 export default api;

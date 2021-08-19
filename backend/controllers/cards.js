@@ -9,7 +9,7 @@ const { forbiddenErrorMessage } = errorMessages;
 const getCards = (req, res, next) => {
   Card.find({})
     .populate('user')
-    .then((cards) => res.send({ cards }))
+    .then((cards) => res.send({ cards: cards.reverse() }))
     .catch(next);
 };
 
@@ -25,9 +25,7 @@ const deleteCard = (req, res, next) => {
 
   Card.findByIdAndDelete(cardId)
     .then((card) => {
-      if (!card) {
-        throw new NotFoundError(notFoundErrorMessage);
-      }
+      if (!card) throw new NotFoundError(notFoundErrorMessage);
       if (card.owner._id.toString() !== req.user._id) {
         throw new ForbiddenError(forbiddenErrorMessage);
       }
@@ -50,9 +48,7 @@ const likeCard = (req, res, next) => {
     },
   )
     .then((card) => {
-      if (!card) {
-        throw new NotFoundError(notFoundErrorMessage);
-      }
+      if (!card) throw new NotFoundError(notFoundErrorMessage);
       return res.send({ card });
     })
     .catch(next);
@@ -72,9 +68,7 @@ const dislikeCard = (req, res, next) => {
     },
   )
     .then((card) => {
-      if (!card) {
-        throw new NotFoundError(notFoundErrorMessage);
-      }
+      if (!card) throw new NotFoundError(notFoundErrorMessage);
       return res.send({ card });
     })
     .catch(next);

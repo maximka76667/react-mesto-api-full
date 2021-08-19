@@ -33,7 +33,8 @@ class Auth {
       body: JSON.stringify({
         "password": data.password,
         "email": data.login
-      })
+      }),
+      credentials: "include"
     })
     .then(this._checkResponse)
   }

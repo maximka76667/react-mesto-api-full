@@ -37,15 +37,14 @@ function App(props) {
 
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [loginResult, setLoginResult] = React.useState(false);
-  const [email, setEmail] = React.useState('');
 
   let isAnyPopupOpen = isRemovePopupOpen || isEditAvatarPopupOpen || isEditProfilePopupOpen || isImagePopupOpen || isAddPlacePopupOpen || isInfoTooltipOpen;
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    const isLiked = card.likes ? card.likes.some(i => i === currentUser._id) : false;
     
     api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
-      setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+      setCards((state) => state.map((c) => c._id === card._id ? newCard.card : c));
     })
     .catch((err) => console.log(err))
   }
@@ -97,7 +96,7 @@ function App(props) {
   function handleUpdateUser(data) {
     setIsLoading(true);
     api.setProfileInfo(data).then((res) => {
-      setCurrentUser(res);
+      setCurrentUser(res.user);
       closeAllPopups();
     })
     .catch((err) => console.log(err))
@@ -108,8 +107,8 @@ function App(props) {
 
   function handleUpdateAvatar({avatar}) {
     setIsLoading(true);
-    api.changeAvatar(avatar).then((res) => {
-      setCurrentUser(res);
+    api.changeAvatar(avatar, localStorage.getItem('token')).then((res) => {
+      setCurrentUser(res.user);
       closeAllPopups();
     })
     .catch((err) => {
@@ -126,7 +125,7 @@ function App(props) {
       name: data.name,
       link: data.link
     }).then((newCard) => {
-      setCards([newCard, ...cards]);
+      setCards([newCard.card, ...cards]);
       closeAllPopups();
     })
     .catch((err) => console.log(err))
@@ -152,7 +151,13 @@ function App(props) {
       setLoggedIn(true);
       setLoginResult(true);
       setIsInfoTooltipOpen(true);
-      setEmail(res.data.email);
+      api.changeToken(token);
+      setCurrentUser(res.user);
+      api.getInitialCards()
+      .then((res) => {
+        setCards(res.cards)
+      })
+      .catch((err) => console.log(err))
       props.history.push('/');
     })
     .catch(err => handleError(err))
@@ -168,7 +173,7 @@ function App(props) {
     .then(() => {
       setLoginResult(true);
       setIsInfoTooltipOpen(true);
-      props.history.push('/sign-in');
+      props.history.push('/signin');
     })
     .catch((err) => handleError(err))
   }
@@ -188,24 +193,12 @@ function App(props) {
   function handleTokenCheck() {
     if (localStorage.getItem('token')) {
       const token = localStorage.getItem('token');
-      handleAuth(token);
+      return handleAuth(token);
     }
   }
 
   React.useEffect(() => {
     handleTokenCheck();
-
-    api.getProfileInfo()
-    .then((data) => {
-      setCurrentUser(data)
-    })
-    .catch((err) => console.log(err))
-
-    api.getInitialCards()
-    .then((result) => {
-      setCards(result)
-    })
-    .catch((err) => console.log(err))
   }, [])
 
   return (
@@ -213,7 +206,7 @@ function App(props) {
       <div className="page" tabIndex="0" onKeyDown={isAnyPopupOpen ? handleKeyDown : null}>
         <div className="page__content">
           <Route path="/">
-            <Header onLogout={handleLogout} email={email} />
+            <Header onLogout={handleLogout} />
           </Route>
 
           <Switch>
@@ -234,7 +227,7 @@ function App(props) {
               cards={cards}
               onCardLike={handleCardLike}
               onCardDelete={handleRemovePopupClick}
-              loggedIn={loggedIn} 
+              loggedIn={loggedIn}
             />
           </Switch>
 
