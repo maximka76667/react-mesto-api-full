@@ -70,6 +70,7 @@ app.use(cors({
   },
   methods: DEFAULT_ALLOWED_METHODS,
   allowedHeaders: 'Content-Type, Authorization',
+  credentials: true,
 }));
 
 app.use((req, res, next) => {
@@ -79,6 +80,7 @@ app.use((req, res, next) => {
   if (method === 'OPTIONS') {
     res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
     res.header('Access-Control-Allow-Headers', requestHeaders);
+    res.header('Access-Control-Allow-Credentials', true);
     return res.end();
   }
 
