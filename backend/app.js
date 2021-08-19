@@ -73,19 +73,19 @@ app.use(cors({
   credentials: true,
 }));
 
-app.use((req, res, next) => {
-  const { method } = req;
-  const requestHeaders = req.headers['access-control-request-headers'];
+// app.use((req, res, next) => {
+//   const { method } = req;
+//   const requestHeaders = req.headers['access-control-request-headers'];
 
-  if (method === 'OPTIONS') {
-    res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
-    res.header('Access-Control-Allow-Headers', requestHeaders);
-    res.header('Access-Control-Allow-Credentials', true);
-    return res.end();
-  }
+//   if (method === 'OPTIONS') {
+//     res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
+//     res.header('Access-Control-Allow-Headers', requestHeaders);
+//     res.header('Access-Control-Allow-Credentials', true);
+//     return res.end();
+//   }
 
-  return next();
-});
+//   return next();
+// });
 
 // User signup
 app.post('/signup', celebrate({
