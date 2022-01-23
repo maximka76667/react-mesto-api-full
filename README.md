@@ -6,3 +6,4 @@ Social media with users registration and authorization. You can post cards, see 
 
 ## Tech Stack
 `React.js`
+`JavaScript`
