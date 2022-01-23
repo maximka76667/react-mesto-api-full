@@ -1,6 +1,8 @@
-# react-mesto-api-full
+# Mesto
 
-Репозиторий для приложения проекта `Mesto`, включающий фронтенд и бэкенд части приложения со следующими возможностями: авторизации и регистрации пользователей, операции с карточками и пользователями. Бэкенд расположите в директории `backend/`, а фронтенд - в `frontend/`.
+## Description
+One of the project of Yandex's web developing course.  
+Social media with users registration and authorization. You can post cards, see and like cards of other users.
 
-### IP: 130.193.55.201  
-### URL: https://max76667.mesto.nomoredomains.monster/
+## Tech Stack
+`React.js`
