@@ -14,12 +14,12 @@ function Header(props) {
   const currentUser = React.useContext(CurrentUserContext);
 
   function toggleMenu() {
-    if(isMenuOpen) return setIsMenuOpen(false);
+    if (isMenuOpen) return setIsMenuOpen(false);
     return setIsMenuOpen(true);
   }
 
   function checkResize() {
-    if(window.innerWidth < 500) return setIsMenuAllowed(true);
+    if (window.innerWidth < 500) return setIsMenuAllowed(true);
     setIsMenuAllowed(false);
     setIsMenuOpen(false);
     return
@@ -43,7 +43,7 @@ function Header(props) {
       </div>
       <div className="header__container">
         <a href="/" className="logo" rel="noreferrer" target="_blank"> </a>
-        { (() => {
+        {(() => {
           switch (location.pathname) {
             case '/signin':
               return <Link to="/signup" className="header__link">Регистрация</Link>

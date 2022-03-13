@@ -1,12 +1,12 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const User = require('../models/user');
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const User = require("../models/user");
 
 const { JWT_SECRET, NODE_ENV } = process.env;
-const NotFoundError = require('../errors/not-found-error');
-const ForbiddenError = require('../errors/forbidden-error');
-const { errorMessages } = require('../errors/error-config');
-const handleErrors = require('../errors/handleErrors');
+const NotFoundError = require("../errors/not-found-error");
+const ForbiddenError = require("../errors/forbidden-error");
+const { errorMessages } = require("../errors/error-config");
+const handleErrors = require("../errors/handleErrors");
 
 const { forbiddenErrorMessage } = errorMessages;
 const notFoundErrorMessage = errorMessages.notFoundErrorMessages.users;
@@ -34,25 +34,30 @@ const getUserById = (req, res, next) => {
 };
 
 const createUser = (req, res, next) => {
-  const {
-    name, about, avatar, email, password,
-  } = req.body;
+  const { name, about, avatar, email, password } = req.body;
 
-  bcrypt.hash(password, 10)
+  bcrypt
+    .hash(password, 10)
     .then((hash) => {
       User.init()
         .then(
           User.create({
-            name, about, avatar, email, password: hash,
+            name,
+            about,
+            avatar,
+            email,
+            password: hash,
           })
-            .then((user) => res.send({
-              _id: user._id,
-              name,
-              about,
-              avatar,
-              email,
-            }))
-            .catch((err) => next(handleErrors(err))),
+            .then((user) =>
+              res.send({
+                _id: user._id,
+                name,
+                about,
+                avatar,
+                email,
+              })
+            )
+            .catch((err) => next(handleErrors(err)))
         )
         .catch(next);
     })
@@ -62,10 +67,15 @@ const createUser = (req, res, next) => {
 const updateUser = (req, res, next) => {
   const { name, about } = req.body;
 
-  User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
+  User.findByIdAndUpdate(
+    req.user._id,
+    { name, about },
+    { new: true, runValidators: true }
+  )
     .then((user) => {
       if (!user) throw new NotFoundError(notFoundErrorMessage);
-      if (user._id.toString() !== req.user._id) throw new ForbiddenError(forbiddenErrorMessage);
+      if (user._id.toString() !== req.user._id)
+        throw new ForbiddenError(forbiddenErrorMessage);
       return res.send({ user });
     })
     .catch((err) => next(handleErrors(err)));
@@ -74,10 +84,15 @@ const updateUser = (req, res, next) => {
 const updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
 
-  User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
+  User.findByIdAndUpdate(
+    req.user._id,
+    { avatar },
+    { new: true, runValidators: true }
+  )
     .then((user) => {
       if (!user) throw new NotFoundError(notFoundErrorMessage);
-      if (user._id.toString() !== req.user._id) throw new ForbiddenError(forbiddenErrorMessage);
+      if (user._id.toString() !== req.user._id)
+        throw new ForbiddenError(forbiddenErrorMessage);
       return res.send({ user });
     })
     .catch((err) => next(handleErrors(err)));
@@ -90,17 +105,16 @@ const login = (req, res, next) => {
     .then((user) => {
       const token = jwt.sign(
         { _id: user._id },
-        NODE_ENV === 'production' ? JWT_SECRET : 'jwt-secret',
-        { expiresIn: '7d' },
+        NODE_ENV === "production" ? JWT_SECRET : "jwt-secret",
+        { expiresIn: "7d" }
       );
 
       res
-        // .cookie('jwt', token, {
-        //   maxAge: 3600000 * 24 * 7,
-        //   httpOnly: true,
-        //   sameSite: true,
-        // })
-        .send({ message: 'Авторизация прошла успешно', token })
+        .cookie("jwt", token, {
+          maxAge: 3600000 * 24 * 7,
+          httpOnly: true,
+          sameSite: true,
+        })
         .end();
     })
     .catch((err) => next(handleErrors(err)));

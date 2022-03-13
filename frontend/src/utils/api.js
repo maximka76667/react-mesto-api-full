@@ -14,91 +14,84 @@ class Api {
       headers: {
         authorization: this._token,
       },
-    })
-    .then(this._checkResponse)
+    }).then(this._checkResponse);
   }
 
   setProfileInfo(data) {
     return fetch(`${this._baseUrl}/users/me`, {
-      method: 'PATCH',
+      method: "PATCH",
       headers: {
         authorization: this._token,
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         name: data.name,
         about: data.about,
       }),
-    })
-    .then(this._checkResponse);
+    }).then(this._checkResponse);
   }
 
   getProfileInfo() {
     return fetch(`${this._baseUrl}/users/me`, {
       headers: {
         authorization: this._token,
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-    })
-    .then(this._checkResponse);
+    }).then(this._checkResponse);
   }
 
   addPlace(data) {
     return fetch(`${this._baseUrl}/cards`, {
-      method: 'POST',
+      method: "POST",
       headers: {
         authorization: this._token,
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         name: data.name,
         link: data.link,
       }),
-    })
-    .then(this._checkResponse);
+    }).then(this._checkResponse);
   }
 
   removeCard(cardId) {
     return fetch(`${this._baseUrl}/cards/${cardId}`, {
-      method: 'DELETE',
+      method: "DELETE",
       headers: {
         authorization: this._token,
       },
-    })
-    .then(this._checkResponse);
+    }).then(this._checkResponse);
   }
 
   changeLikeCardStatus(cardId, isLiked) {
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
-      method: isLiked ? 'DELETE' : 'PUT',
+      method: isLiked ? "DELETE" : "PUT",
       headers: {
         authorization: this._token,
       },
-    })
-    .then(this._checkResponse);
+    }).then(this._checkResponse);
   }
 
   changeAvatar(avatarLink) {
     return fetch(`${this._baseUrl}/users/me/avatar`, {
-      method: 'PATCH',
+      method: "PATCH",
       headers: {
         authorization: this._token,
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         avatar: avatarLink,
       }),
-    })
-    .then(this._checkResponse);
+    }).then(this._checkResponse);
   }
 
   changeToken(token) {
-    this._token = `Bearer ${token}`
+    this._token = `Bearer ${token}`;
   }
 }
 
 const api = new Api({
-  baseUrl: 'https://api.max76667.mesto.nomoredomains.monster'
+  baseUrl: "http://localhost:3000",
 });
 
 export default api;

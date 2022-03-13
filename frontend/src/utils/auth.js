@@ -10,46 +10,43 @@ class Auth {
 
   register(data) {
     return fetch(`${this._baseUrl}/signup`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        "password": data.password,
-        "email": data.email
-      })
-    })
-    .then(this._checkResponse);
+        password: data.password,
+        email: data.email,
+      }),
+    }).then(this._checkResponse);
   }
 
   login(data) {
     return fetch(`${this._baseUrl}/signin`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        "password": data.password,
-        "email": data.login
-      })
-    })
-    .then(this._checkResponse)
+        password: data.password,
+        email: data.login,
+      }),
+    }).then(this._checkResponse);
   }
 
   getEmail(token) {
     return fetch(`${this._baseUrl}/users/me`, {
-      method: 'GET',
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Authorization" : `Bearer ${token}`
-      }
-    })
-    .then(this._checkResponse);
+        Authorization: `Bearer ${token}`,
+      },
+    }).then(this._checkResponse);
   }
 }
 
 const auth = new Auth({
-  baseUrl: 'https://api.max76667.mesto.nomoredomains.monster'
-})
+  baseUrl: "http://localhost:3000",
+});
 
 export default auth;
